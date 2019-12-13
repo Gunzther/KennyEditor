@@ -8,10 +8,10 @@ using System.IO;
 public class KennyEditor : EditorWindow
 {
     static KennyEditor window;
-    public int hBlock, vBlock;
     float windowWidth = 200;
     float windowHeight = 200;
     Texture2D terrainImage;
+    int hBlock, vBlock;
 
     public float duration;
 
@@ -132,7 +132,7 @@ public class KennyEditor : EditorWindow
         {
             if(GameObject.FindGameObjectWithTag("KennyTiles") != null)
             {
-                Destroy(GameObject.FindGameObjectWithTag("KennyTiles"));
+                DestroyImmediate(GameObject.FindGameObjectWithTag("KennyTiles"));
             }
         }
         GUILayout.EndHorizontal();
