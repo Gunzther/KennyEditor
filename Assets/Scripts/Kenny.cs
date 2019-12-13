@@ -5,9 +5,9 @@ using UnityEditor;
 using System;
 using System.IO;
 
-public class KennyEditor : EditorWindow
+public class Kenny : EditorWindow
 {
-    static KennyEditor window;
+    static Kenny window;
     float windowWidth = 200;
     float windowHeight = 200;
     Texture2D terrainImage;
@@ -20,74 +20,22 @@ public class KennyEditor : EditorWindow
     [MenuItem("Kenny/Map Editor")]
     static void OpenWindow()
     {
-        window = (KennyEditor)GetWindow(typeof(KennyEditor));
-        window.name = "SliderEditor";
-        window.wantsMouseEnterLeaveWindow = true;
-        window.minSize = new Vector2(window.windowWidth, window.windowHeight);
-        window.Show();
+        if (window == null)
+        {
+            window = (Kenny)GetWindow(typeof(Kenny));
+            window.name = "SliderEditor";
+            window.wantsMouseEnterLeaveWindow = true;
+            window.minSize = new Vector2(window.windowWidth, window.windowHeight);
+            window.Show();
+        }
+        else
+        {
+            window.Focus();
+        }
+
+        window.wantsMouseMove = true;
+        EditorApplication.modifierKeysChanged += window.Repaint;
     }
-    //private void OnEnable()
-    //{
-    //    SunsetMusicImporter.OnLoaded += SunsetMusicImporter_OnLoaded;
-    //}
-    //private void OnDisable()
-    //{
-    //    SunsetMusicImporter.OnLoaded -= SunsetMusicImporter_OnLoaded;
-    //}
-    //private void SunsetMusicImporter_OnLoaded()
-    //{
-    //    var property = SunsetSaveSystem.saveOb.gameProperty;
-    //    switch (property.level)
-    //    {
-    //        case "easy":
-    //            difficulty = Difficult.EASY;
-    //            break;
-    //        case "normal":
-    //            difficulty = Difficult.NORMAL;
-    //            break;
-    //        case "hard":
-    //            difficulty = Difficult.HARD;
-    //            break;
-    //    }
-    //    Color newColor;
-    //    buttonSkinType = (property.buttonType == "color") ? SkinType.Color : SkinType.Texture;
-    //    if (property.buttonType == "color")
-    //    {
-    //        if (ColorUtility.TryParseHtmlString(property.buttonValue, out newColor))
-    //        {
-    //            buttonColor = newColor;
-    //        }
-    //        buttonImage = null;
-    //    }
-    //    else
-    //    {
-    //        buttonImage = Resources.Load<Texture2D>("sprite/" + property.buttonValue);
-    //        buttonColor = Color.black;
-    //    }
-    //    laneSkinType = (property.laneType == "color") ? SkinType.Color : SkinType.Texture;
-    //    if (property.laneType == "color")
-    //    {
-    //        if (ColorUtility.TryParseHtmlString(property.laneValue, out newColor)) laneColor = newColor;
-    //        laneImage = null;
-    //    }
-    //    else
-    //    {
-    //        laneImage = Resources.Load<Texture2D>("sprite/" + property.laneValue);
-    //        laneColor = Color.black;
-    //    }
-    //    noteSkinType = (property.noteType == "color") ? SkinType.Color : SkinType.Texture;
-    //    if (property.noteType == "color")
-    //    {
-    //        if (ColorUtility.TryParseHtmlString(property.noteVale, out newColor)) noteColor = newColor;
-    //        laneImage = null;
-    //    }
-    //    else
-    //    {
-    //        noteImage = Resources.Load<Texture2D>("sprite/" + property.noteVale);
-    //        noteColor = Color.black;
-    //    }
-    //    Repaint();
-    //}
 
     private void OnGUI()
     {
@@ -95,7 +43,6 @@ public class KennyEditor : EditorWindow
         GUILayout.BeginVertical();
         DrawSizeSetting();
         DrawTerrainsChoosing();
-        DrawPlayerViewConsole();
         DrawTapConsole();
         DrawMusicSpeed();
         DrawSave();
@@ -119,7 +66,7 @@ public class KennyEditor : EditorWindow
             kennyMap.tag = "KennyTiles";
             for (int i = 0; i < hBlock; i++)
             {
-                for(int j = 0; j < vBlock; j++)
+                for (int j = 0; j < vBlock; j++)
                 {
                     GameObject kBlock = Instantiate(GameObject.FindGameObjectWithTag("KennySquare"));
                     kBlock.transform.position = new Vector2(i, j);
@@ -130,7 +77,7 @@ public class KennyEditor : EditorWindow
         }
         if (GUILayout.Button("Clear All", GUILayout.Width(100)))
         {
-            if(GameObject.FindGameObjectWithTag("KennyTiles") != null)
+            if (GameObject.FindGameObjectWithTag("KennyTiles") != null)
             {
                 DestroyImmediate(GameObject.FindGameObjectWithTag("KennyTiles"));
             }
@@ -144,31 +91,22 @@ public class KennyEditor : EditorWindow
     {
         EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Terrains Creator", EditorStyles.boldLabel);
-        //GUILayout.BeginHorizontal();
-        //difficulty = (Difficult)EditorGUILayout.EnumPopup("difficulty level :", difficulty, GUILayout.Width(300));
-        //GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         terrainImage = (Texture2D)EditorGUILayout.ObjectField("", terrainImage, typeof(Texture2D), GUILayout.Width(80));
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Place"))
+        {
+            Debug.Log("Place");
+        }
         if (GUILayout.Button("Place All"))
         {
-            Debug.Log("Place All");
-        }
-        GUILayout.EndHorizontal();
-    }
-    void DrawPlayerViewConsole()
-    {
-        EditorGUILayout.LabelField("");
-        EditorGUILayout.LabelField("Editor view", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Topview"))
-        {
-            Debug.Log("top view");
-        }
-        if (GUILayout.Button("Playerview"))
-        {
-            Debug.Log("player view");
+            Debug.Log(Resources.Load(terrainImage.name) != null);
+            //GameObject tiles = GameObject.FindGameObjectWithTag("KennyTiles");
+            //for (int i = 0; i < tiles.transform.childCount; i++)
+            //{
+            //    tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(terrainImage.name);
+            //}
         }
         GUILayout.EndHorizontal();
     }
@@ -260,26 +198,5 @@ public class KennyEditor : EditorWindow
             rabbitsJ.addRabbit();
         }
         GUILayout.EndHorizontal();
-    }
-    //private void Update()
-    //{
-    //    if (trackManager == null) return;
-    //    if (trackManager.audioSource == null) return;
-    //    if (trackManager.audioSource.isPlaying)
-    //    {
-    //        track = trackManager.currentTime;
-    //        Repaint();
-    //    }
-    //    else
-    //    {
-    //        trackManager.currentTime = track;
-    //        trackManager.audioSource.time = track;
-    //    }
-
-    //}
-    void SelectGameView()
-    {
-        var gvWndType = typeof(Editor).Assembly.GetType("UnityEditor.GameView");
-        var gvWnd = EditorWindow.GetWindow(gvWndType);
     }
 }
