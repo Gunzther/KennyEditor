@@ -329,9 +329,12 @@ public class Kenny : EditorWindow
             {
                 foreach (Transform transform in Selection.transforms)
                 {
-                    Color tmp = transform.GetComponent<SpriteRenderer>().color;
-                    tmp.a = 0f;
-                    transform.GetComponent<SpriteRenderer>().color = tmp;
+                    if(transform.parent.tag == "KennyEnvironments")
+                    {
+                        Color tmp = transform.GetComponent<SpriteRenderer>().color;
+                        tmp.a = 0f;
+                        transform.GetComponent<SpriteRenderer>().color = tmp;
+                    }
                 }
             }
             else
