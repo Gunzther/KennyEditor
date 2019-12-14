@@ -11,7 +11,7 @@ public class Kenny : EditorWindow
     float windowWidth = 315;
     float windowHeight = 550;
     Texture2D terrainImage, enviImage;
-    bool openTerrain = false;
+    bool openTerrain = true;
     int hBlock, vBlock, percentageT, percentageE;
     System.Random rand;
 
@@ -319,6 +319,24 @@ public class Kenny : EditorWindow
                 {
                     Debug.Log("Map hasn't generated.");
                 }
+            }
+        }
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Delete Items on Selected Tiles"))
+        {
+            if (Selection.transforms != null)
+            {
+                foreach (Transform transform in Selection.transforms)
+                {
+                    Color tmp = transform.GetComponent<SpriteRenderer>().color;
+                    tmp.a = 0f;
+                    transform.GetComponent<SpriteRenderer>().color = tmp;
+                }
+            }
+            else
+            {
+                Debug.Log("Please select a tile");
             }
         }
         GUILayout.EndHorizontal();
