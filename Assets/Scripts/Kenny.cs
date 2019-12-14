@@ -150,7 +150,9 @@ public class Kenny : EditorWindow
         percentageT = EditorGUILayout.IntField(percentageT, GUILayout.Width(95));
         if (GUILayout.Button("Generate"))
         {
-            Debug.Log("Gen map on percentage");
+            int tileAmount = GameObject.FindGameObjectWithTag("KennyTiles").transform.childCount;
+            int randomTileAmount = tileAmount * percentageT / 100;
+            Debug.Log("Rand: " + randomTileAmount);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
@@ -228,7 +230,9 @@ public class Kenny : EditorWindow
         percentageE = EditorGUILayout.IntField(percentageE, GUILayout.Width(95));
         if (GUILayout.Button("Generate"))
         {
-            Debug.Log("Gen map on percentage");
+            int tileAmount = GameObject.FindGameObjectWithTag("KennyEnvironments").transform.childCount;
+            int randomTileAmount = tileAmount * percentageE / 100;
+            Debug.Log("Rand: " + randomTileAmount);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
