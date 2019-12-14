@@ -151,9 +151,28 @@ public class Kenny : EditorWindow
         percentageT = EditorGUILayout.IntField(percentageT, GUILayout.Width(95));
         if (GUILayout.Button("Generate"))
         {
-            int tileAmount = GameObject.FindGameObjectWithTag("KennyTiles").transform.childCount;
-            int randomTileAmount = tileAmount * percentageT / 100;
-            Debug.Log("Rand: " + randomTileAmount);
+            Sprite terrain = Resources.Load<Sprite>("Terrains/" + terrainImage.name);
+            if (terrain != null)
+            {
+                GameObject kennyTerrains = GameObject.FindGameObjectWithTag("KennyTiles");
+                int tileAmount = kennyTerrains.transform.childCount;
+                int randomTileAmount = tileAmount * percentageT / 100;
+                ArrayList alreadyGen = new ArrayList();
+                rand = new System.Random();
+                while (randomTileAmount > 0)
+                {
+                    int num = rand.Next(0, tileAmount);
+                    Debug.Log(num);
+                    if (!alreadyGen.Contains(num))
+                    {
+                        kennyTerrains.transform.GetChild(num).transform.GetComponent<SpriteRenderer>().sprite = terrain;
+                        alreadyGen.Add(num);
+                        randomTileAmount -= 1;
+                    }
+                    else continue;
+                }
+                Debug.Log("Rand: " + randomTileAmount);
+            }
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
@@ -238,18 +257,22 @@ public class Kenny : EditorWindow
                 int tileAmount = kennyEnvi.transform.childCount;
                 int randomTileAmount = tileAmount * percentageE / 100;
                 ArrayList alreadyGen = new ArrayList();
-                while(tileAmount > 0)
+                rand = new System.Random();
+                while(randomTileAmount > 0)
                 {
-                    int num = rand.Next(0, randomTileAmount);
+                    int num = rand.Next(0, tileAmount);
                     if (!alreadyGen.Contains(num))
                     {
-                        kennyEnvi.transform.GetChild(num).transform.GetComponent<SpriteRenderer>().sprite = terrain;
+                        SpriteRenderer target = kennyEnvi.transform.GetChild(num).transform.GetComponent<SpriteRenderer>();
+                        target.sprite = terrain;
+                        Color tmp = target.color;
+                        tmp.a = 1f;
+                        target.color = tmp;
                         alreadyGen.Add(num);
-                        tileAmount--;
+                        randomTileAmount -= 1;
                     }
                     else continue;
                 }
-                Debug.Log("Rand: " + randomTileAmount);
             }
         }
         GUILayout.EndHorizontal();
