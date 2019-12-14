@@ -44,8 +44,6 @@ public class Kenny : EditorWindow
         DrawSizeSetting();
         DrawTerrainsChoosing();
         DrawEnviChoosing();
-        DrawTapConsole();
-        DrawMusicSpeed();
         DrawSave();
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
@@ -81,7 +79,9 @@ public class Kenny : EditorWindow
                     kBlock2.transform.position = new Vector2(i + 0.5f, j + 0.5f);
 
                     SpriteRenderer srBlock2 = kBlock2.GetComponent<SpriteRenderer>();
-                    srBlock2.sprite = null;
+                    Color tmp = srBlock2.color;
+                    tmp.a = 0f;
+                    srBlock2.color = tmp;
                     srBlock2.sortingLayerName = "1";
 
                     kBlock.GetComponent<SpriteRenderer>().enabled = true;
@@ -169,7 +169,22 @@ public class Kenny : EditorWindow
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Place"))
         {
-            Debug.Log("Place");
+            Sprite terrain = Resources.Load<Sprite>("Environments/" + enviImage.name);
+            if (terrain != null)
+            {
+                GameObject selectedObject = Selection.activeGameObject;
+                if (selectedObject != null)
+                {
+                    selectedObject.GetComponent<SpriteRenderer>().sprite = terrain;
+                    Color tmp = selectedObject.GetComponent<SpriteRenderer>().color;
+                    tmp.a = 1f;
+                    selectedObject.GetComponent<SpriteRenderer>().color = tmp;
+                }
+                else
+                {
+                    Debug.Log("Please select a tile");
+                }
+            }
         }
         if (GUILayout.Button("Place All"))
         {
@@ -181,7 +196,11 @@ public class Kenny : EditorWindow
                 {
                     for (int i = 0; i < tiles.transform.childCount; i++)
                     {
-                        tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>().sprite = envi;
+                        SpriteRenderer sr = tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>();
+                        sr.sprite = envi;
+                        Color tmp = sr.color;
+                        tmp.a = 1f;
+                        sr.color = tmp;
                     }
                 }
                 else
@@ -192,80 +211,26 @@ public class Kenny : EditorWindow
         }
         if (GUILayout.Button("Reset All"))
         {
-            GameObject tiles = GameObject.FindGameObjectWithTag("KennyEnvironments");
-            if (tiles != null)
+            Sprite terrain = Resources.Load<Sprite>("Terrains/grid");
+            if (terrain != null)
             {
-                for (int i = 0; i < tiles.transform.childCount; i++)
+                GameObject tiles = GameObject.FindGameObjectWithTag("KennyEnvironments");
+                if (tiles != null)
                 {
-                    tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>().sprite = null;
+                    for (int i = 0; i < tiles.transform.childCount; i++)
+                    {
+                        SpriteRenderer sr = tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>();
+                        sr.sprite = terrain;
+                        Color tmp = sr.color;
+                        tmp.a = 0f;
+                        sr.color = tmp;
+                    }
                 }
             }
         }
         GUILayout.EndHorizontal();
     }
 
-    void DrawMusicSpeed()
-    {
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("0.25x"))
-        {
-            Debug.Log("0.25x");
-        }
-        if (GUILayout.Button("0.5x"))
-        {
-            Debug.Log("0.5x");
-        }
-        if (GUILayout.Button("1x"))
-        {
-            Debug.Log("1x");
-        }
-        if (GUILayout.Button("2x"))
-        {
-            Debug.Log("2x");
-        }
-        GUILayout.EndHorizontal();
-    }
-    void DrawTapConsole()
-    {
-        EditorGUILayout.LabelField("");
-        EditorGUILayout.LabelField("Note Creator/Setter", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Tap"))
-        {
-            Debug.Log("tap");
-        }
-        if (GUILayout.Button("Slide"))
-        {
-            Debug.Log("slide");
-        }
-        if (GUILayout.Button("<-"))
-        {
-            Debug.Log("<-");
-        }
-        if (GUILayout.Button("->"))
-        {
-            Debug.Log("->");
-        }
-        if (GUILayout.Button("Close Lane"))
-        {
-            Debug.Log("close lane");
-        }
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Delete"))
-        {
-            Debug.Log("delete");
-        }
-        if (GUILayout.Button("Drag"))
-        {
-            Debug.Log("drag");
-        }
-        if (GUILayout.Button("Select path"))
-        {
-            Debug.Log("select path");
-        }
-        GUILayout.EndHorizontal();
-    }
     void DrawSave()
     {
         EditorGUILayout.LabelField("");
