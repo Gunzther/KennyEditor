@@ -8,11 +8,11 @@ using System.IO;
 public class Kenny : EditorWindow
 {
     static Kenny window;
-    float windowWidth = 200;
-    float windowHeight = 200;
+    float windowWidth = 315;
+    float windowHeight = 550;
     Texture2D terrainImage, enviImage;
     bool openTerrain = false;
-    int hBlock, vBlock;
+    int hBlock, vBlock, percentageT, percentageE;
 
     public float duration;
 
@@ -146,7 +146,15 @@ public class Kenny : EditorWindow
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Place"))
+        GUILayout.Label("percentage : ", GUILayout.Width(90));
+        percentageT = EditorGUILayout.IntField(percentageT, GUILayout.Width(95));
+        if (GUILayout.Button("Generate"))
+        {
+            Debug.Log("Gen map on percentage");
+        }
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Place on Selected Tiles"))
         {
             Sprite terrain = Resources.Load<Sprite>("Terrains/" + terrainImage.name);
             if (terrain != null)
@@ -188,6 +196,8 @@ public class Kenny : EditorWindow
                 }
             }
         }
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
         if (GUILayout.Button("Reset All"))
         {
             Sprite terrain = Resources.Load<Sprite>("Terrains/grid");
@@ -214,19 +224,19 @@ public class Kenny : EditorWindow
         enviImage = (Texture2D)EditorGUILayout.ObjectField("", enviImage, typeof(Texture2D), GUILayout.Width(80));
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Place"))
+        GUILayout.Label("percentage : ", GUILayout.Width(90));
+        percentageE = EditorGUILayout.IntField(percentageE, GUILayout.Width(95));
+        if (GUILayout.Button("Generate"))
+        {
+            Debug.Log("Gen map on percentage");
+        }
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Place on Selected Tiles"))
         {
             Sprite terrain = Resources.Load<Sprite>("Environments/" + enviImage.name);
             if (terrain != null)
             {
-                //GameObject selectedObject = Selection.activeGameObject;
-                //if (selectedObject != null)
-                //{
-                //    selectedObject.GetComponent<SpriteRenderer>().sprite = terrain;
-                //    Color tmp = selectedObject.GetComponent<SpriteRenderer>().color;
-                //    tmp.a = 1f;
-                //    selectedObject.GetComponent<SpriteRenderer>().color = tmp;
-                //}
                 if (Selection.transforms != null)
                 {
                     foreach (Transform transform in Selection.transforms)
@@ -266,6 +276,8 @@ public class Kenny : EditorWindow
                 }
             }
         }
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
         if (GUILayout.Button("Reset All"))
         {
             Sprite terrain = Resources.Load<Sprite>("Terrains/grid");
