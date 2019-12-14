@@ -10,7 +10,7 @@ public class Kenny : EditorWindow
     static Kenny window;
     float windowWidth = 200;
     float windowHeight = 200;
-    Texture2D terrainImage;
+    Texture2D terrainImage, enviImage;
     int hBlock, vBlock;
 
     public float duration;
@@ -43,6 +43,7 @@ public class Kenny : EditorWindow
         GUILayout.BeginVertical();
         DrawSizeSetting();
         DrawTerrainsChoosing();
+        DrawEnviChoosing();
         DrawTapConsole();
         DrawMusicSpeed();
         DrawSave();
@@ -64,22 +65,44 @@ public class Kenny : EditorWindow
             GameObject kennyMap = new GameObject();
             kennyMap.name = "KennyTiles";
             kennyMap.tag = "KennyTiles";
+
+            GameObject kennyEnviPlace = new GameObject();
+            kennyEnviPlace.name = "KennyEnvironments";
+            kennyEnviPlace.tag = "KennyEnvironments";
+
             for (int i = 0; i < hBlock; i++)
             {
                 for (int j = 0; j < vBlock; j++)
                 {
                     GameObject kBlock = Instantiate(GameObject.FindGameObjectWithTag("KennySquare"));
-                    kBlock.transform.position = new Vector2(i, j);
+                    GameObject kBlock2 = Instantiate(GameObject.FindGameObjectWithTag("KennySquare"));
+
+                    kBlock.transform.position = new Vector2(i+0.5f, j+0.5f);
+                    kBlock2.transform.position = new Vector2(i + 0.5f, j + 0.5f);
+
+                    SpriteRenderer srBlock2 = kBlock2.GetComponent<SpriteRenderer>();
+                    srBlock2.sprite = null;
+                    srBlock2.sortingLayerName = "1";
+
                     kBlock.GetComponent<SpriteRenderer>().enabled = true;
+                    srBlock2.enabled = true;
+
                     kBlock.transform.parent = kennyMap.transform;
+                    kBlock2.transform.parent = kennyEnviPlace.transform;
                 }
             }
         }
-        if (GUILayout.Button("Clear All", GUILayout.Width(100)))
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Delete All"))
         {
             if (GameObject.FindGameObjectWithTag("KennyTiles") != null)
             {
                 DestroyImmediate(GameObject.FindGameObjectWithTag("KennyTiles"));
+            }
+            if (GameObject.FindGameObjectWithTag("KennyEnvironments") != null)
+            {
+                DestroyImmediate(GameObject.FindGameObjectWithTag("KennyEnvironments"));
             }
         }
         GUILayout.EndHorizontal();
@@ -101,15 +124,86 @@ public class Kenny : EditorWindow
         }
         if (GUILayout.Button("Place All"))
         {
-            Debug.Log(Resources.Load(terrainImage.name) != null);
-            //GameObject tiles = GameObject.FindGameObjectWithTag("KennyTiles");
-            //for (int i = 0; i < tiles.transform.childCount; i++)
-            //{
-            //    tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load(terrainImage.name);
-            //}
+            Sprite terrain = Resources.Load<Sprite>("Terrains/" + terrainImage.name);
+            if(terrain != null)
+            {
+                GameObject tiles = GameObject.FindGameObjectWithTag("KennyTiles");
+                if (tiles != null)
+                {
+                    for (int i = 0; i < tiles.transform.childCount; i++)
+                    {
+                        tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>().sprite = terrain;
+                    }
+                }
+                else
+                {
+                    Debug.Log("Map hasn't generated.");
+                }
+            }
+        }
+        if (GUILayout.Button("Reset All"))
+        {
+            Sprite terrain = Resources.Load<Sprite>("Terrains/grid");
+            if (terrain != null)
+            {
+                GameObject tiles = GameObject.FindGameObjectWithTag("KennyTiles");
+                if (tiles != null)
+                {
+                    for (int i = 0; i < tiles.transform.childCount; i++)
+                    {
+                        tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>().sprite = terrain;
+                    }
+                }
+            }
         }
         GUILayout.EndHorizontal();
     }
+
+    void DrawEnviChoosing()
+    {
+        EditorGUILayout.LabelField("");
+        EditorGUILayout.LabelField("Environments Creator", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal();
+        enviImage = (Texture2D)EditorGUILayout.ObjectField("", enviImage, typeof(Texture2D), GUILayout.Width(80));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Place"))
+        {
+            Debug.Log("Place");
+        }
+        if (GUILayout.Button("Place All"))
+        {
+            Sprite envi = Resources.Load<Sprite>("Environments/" + enviImage.name);
+            if (envi != null)
+            {
+                GameObject tiles = GameObject.FindGameObjectWithTag("KennyEnvironments");
+                if (tiles != null)
+                {
+                    for (int i = 0; i < tiles.transform.childCount; i++)
+                    {
+                        tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>().sprite = envi;
+                    }
+                }
+                else
+                {
+                    Debug.Log("Map hasn't generated.");
+                }
+            }
+        }
+        if (GUILayout.Button("Reset All"))
+        {
+            GameObject tiles = GameObject.FindGameObjectWithTag("KennyEnvironments");
+            if (tiles != null)
+            {
+                for (int i = 0; i < tiles.transform.childCount; i++)
+                {
+                    tiles.transform.GetChild(i).transform.GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+        }
+        GUILayout.EndHorizontal();
+    }
+
     void DrawMusicSpeed()
     {
         GUILayout.BeginHorizontal();
