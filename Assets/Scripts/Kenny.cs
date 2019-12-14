@@ -11,6 +11,7 @@ public class Kenny : EditorWindow
     float windowWidth = 200;
     float windowHeight = 200;
     Texture2D terrainImage, enviImage;
+    bool openTerrain = false;
     int hBlock, vBlock;
 
     public float duration;
@@ -118,9 +119,55 @@ public class Kenny : EditorWindow
         terrainImage = (Texture2D)EditorGUILayout.ObjectField("", terrainImage, typeof(Texture2D), GUILayout.Width(80));
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
+        openTerrain =  GUILayout.Toggle(openTerrain, "select terrains block mode");
+        if (openTerrain)
+        {
+            GameObject enviTiles = GameObject.FindGameObjectWithTag("KennyEnvironments");
+            if(enviTiles != null)
+            {
+                GameObject kEnvi = GameObject.FindGameObjectWithTag("KennyEnvironments");
+                for (int i = 0; i < kEnvi.transform.childCount; i++)
+                {
+                    kEnvi.transform.GetChild(i).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                }
+            }
+        }
+        else
+        {
+            GameObject enviTiles = GameObject.FindGameObjectWithTag("KennyEnvironments");
+            if (enviTiles != null)
+            {
+                GameObject kEnvi = GameObject.FindGameObjectWithTag("KennyEnvironments");
+                for (int i = 0; i < kEnvi.transform.childCount; i++)
+                {
+                    kEnvi.transform.GetChild(i).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                }
+            }
+        }
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
         if (GUILayout.Button("Place"))
         {
-            Debug.Log("Place");
+            Sprite terrain = Resources.Load<Sprite>("Terrains/" + terrainImage.name);
+            if (terrain != null)
+            {
+                //GameObject selectedObject = Selection.activeGameObject;
+                //if (selectedObject != null)
+                //{
+                //    selectedObject.GetComponent<SpriteRenderer>().sprite = terrain;
+                //}
+                if (Selection.transforms != null)
+                {
+                    foreach (Transform transform in Selection.transforms)
+                    {
+                        transform.GetComponent<SpriteRenderer>().sprite = terrain;
+                    }
+                }
+                else
+                {
+                    Debug.Log("Please select a tile");
+                }
+            }
         }
         if (GUILayout.Button("Place All"))
         {
@@ -172,13 +219,23 @@ public class Kenny : EditorWindow
             Sprite terrain = Resources.Load<Sprite>("Environments/" + enviImage.name);
             if (terrain != null)
             {
-                GameObject selectedObject = Selection.activeGameObject;
-                if (selectedObject != null)
+                //GameObject selectedObject = Selection.activeGameObject;
+                //if (selectedObject != null)
+                //{
+                //    selectedObject.GetComponent<SpriteRenderer>().sprite = terrain;
+                //    Color tmp = selectedObject.GetComponent<SpriteRenderer>().color;
+                //    tmp.a = 1f;
+                //    selectedObject.GetComponent<SpriteRenderer>().color = tmp;
+                //}
+                if (Selection.transforms != null)
                 {
-                    selectedObject.GetComponent<SpriteRenderer>().sprite = terrain;
-                    Color tmp = selectedObject.GetComponent<SpriteRenderer>().color;
-                    tmp.a = 1f;
-                    selectedObject.GetComponent<SpriteRenderer>().color = tmp;
+                    foreach (Transform transform in Selection.transforms)
+                    {
+                        transform.GetComponent<SpriteRenderer>().sprite = terrain;
+                        Color tmp = transform.GetComponent<SpriteRenderer>().color;
+                        tmp.a = 1f;
+                        transform.GetComponent<SpriteRenderer>().color = tmp;
+                    }
                 }
                 else
                 {
@@ -247,6 +304,13 @@ public class Kenny : EditorWindow
         //    SunsetSaveSystem.SetGameProperty(GetGameProperty());
         //    SunsetSaveSystem.Save(JsonUtility.ToJson(SunsetSaveSystem.saveOb));
         //}
+        if (GUILayout.Button("Select test"))
+        {
+            foreach (Transform transform in Selection.transforms)
+            {
+                Debug.Log(transform.name);
+            }
+        }
         if (GUILayout.Button("Rabby Save"))
         {
             string line = JsonUtility.ToJson(rabbitsJ.GetRabbitsInfo());
