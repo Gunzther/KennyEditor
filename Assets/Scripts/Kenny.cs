@@ -13,6 +13,7 @@ public class Kenny : EditorWindow
     Texture2D terrainImage, enviImage;
     bool openTerrain = false;
     int hBlock, vBlock, percentageT, percentageE;
+    System.Random rand;
 
     public float duration;
 
@@ -230,9 +231,26 @@ public class Kenny : EditorWindow
         percentageE = EditorGUILayout.IntField(percentageE, GUILayout.Width(95));
         if (GUILayout.Button("Generate"))
         {
-            int tileAmount = GameObject.FindGameObjectWithTag("KennyEnvironments").transform.childCount;
-            int randomTileAmount = tileAmount * percentageE / 100;
-            Debug.Log("Rand: " + randomTileAmount);
+            Sprite terrain = Resources.Load<Sprite>("Environments/" + enviImage.name);
+            if(terrain != null)
+            {
+                GameObject kennyEnvi = GameObject.FindGameObjectWithTag("KennyEnvironments");
+                int tileAmount = kennyEnvi.transform.childCount;
+                int randomTileAmount = tileAmount * percentageE / 100;
+                ArrayList alreadyGen = new ArrayList();
+                while(tileAmount > 0)
+                {
+                    int num = rand.Next(0, randomTileAmount);
+                    if (!alreadyGen.Contains(num))
+                    {
+                        kennyEnvi.transform.GetChild(num).transform.GetComponent<SpriteRenderer>().sprite = terrain;
+                        alreadyGen.Add(num);
+                        tileAmount--;
+                    }
+                    else continue;
+                }
+                Debug.Log("Rand: " + randomTileAmount);
+            }
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
