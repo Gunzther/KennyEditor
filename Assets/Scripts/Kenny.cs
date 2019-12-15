@@ -17,8 +17,6 @@ public class Kenny : EditorWindow
 
     public float duration;
 
-    Rabbits rabbitsJ = new Rabbits();
-
     [MenuItem("Kenny/Map Editor")]
     static void OpenWindow()
     {
@@ -46,7 +44,6 @@ public class Kenny : EditorWindow
         DrawSizeSetting();
         DrawTerrainsChoosing();
         DrawEnviChoosing();
-        DrawSave();
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
     }
@@ -362,41 +359,6 @@ public class Kenny : EditorWindow
                     }
                 }
             }
-        }
-        GUILayout.EndHorizontal();
-    }
-
-    void DrawSave()
-    {
-        EditorGUILayout.LabelField("");
-        EditorGUILayout.LabelField("Export to JSON", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        //if (GUILayout.Button("Save"))
-        //{
-        //    SunsetSaveSystem.Init();
-        //    SunsetSaveSystem.SetNameLevelAndLane(AudioTrackManager.Instance.audioSource.clip.name, difficulty.ToString());
-        //    SunsetSaveSystem.SetNoteList(noteCreator.tapNotes, noteCreator.swipeNotes, noteCreator.slideNotes, noteCreator.closeLaneNotes);
-        //    SunsetSaveSystem.SetPlaneList(noteCreator.slideNotes);
-        //    SunsetSaveSystem.SetGrid(GridData.Instance.GetGridInfo());
-        //    SunsetSaveSystem.SetMusicInfo(AudioTrackManager.Instance.GetAudioTrackInfo());
-        //    SunsetSaveSystem.SetGameProperty(GetGameProperty());
-        //    SunsetSaveSystem.Save(JsonUtility.ToJson(SunsetSaveSystem.saveOb));
-        //}
-        if (GUILayout.Button("Select test"))
-        {
-            foreach (Transform transform in Selection.transforms)
-            {
-                Debug.Log(transform.name);
-            }
-        }
-        if (GUILayout.Button("Rabby Save"))
-        {
-            string line = JsonUtility.ToJson(rabbitsJ.GetRabbitsInfo());
-            File.WriteAllText(@"./Assets/test.json", line);
-        }
-        if (GUILayout.Button("Add Rabby"))
-        {
-            rabbitsJ.addRabbit();
         }
         GUILayout.EndHorizontal();
     }
