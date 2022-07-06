@@ -2,6 +2,8 @@
 
 Kenny is a map editor for games developers. Which lets the user express their ideas into a visualizer. This application might be something simple a game designer could make use of. Managing their time better for other features to implement instead of spending the majority of their time designing a map.
 
+![kenny editor example](https://github.com/Gunzther/KennyEditor/blob/master/kenny_editor.png)
+
 ## Getting Started
 
 ### Prerequisites
